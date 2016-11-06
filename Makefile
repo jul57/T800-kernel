@@ -367,6 +367,7 @@ KBUILD_CPPFLAGS := -D__KERNEL__
 KBUILD_CFLAGS   := -Wall -Werror -Wundef -Wstrict-prototypes -Wno-trigraphs \
 		   -fno-strict-aliasing -fno-common \
 		   -Werror-implicit-function-declaration \
+                   -mcpu=cortex-a15.cortex-a7 -mtune=cortex-a15.cortex-a7 \
 		   -Wno-format-security -Wno-unused \
 		   -fno-delete-null-pointer-checks
 KBUILD_AFLAGS_KERNEL :=
