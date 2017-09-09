@@ -1,0 +1,30 @@
+From a58a7e628132135a25b05e8b233fddaaffb6e627 Mon Sep 17 00:00:00 2001
+From: UpInTheAir <upintheair.xda@gmail.com>
+Date: Fri, 6 Mar 2015 10:46:02 +0700
+Subject: [PATCH]  timer: optimize apply_slack()
+
+__fls(mask) is equivalent to find_last_bit(&mask, BITS_PER_LONG), but
+cheaper.
+find_last_bit was showing up high on the list when I was profiling for
+stalls
+on icache misses on a system with very small cache size (MIPS).
+
+Signed-off-by: Felix Fietkau <nbd@openwrt.org>
+Signed-off-by: edoko <r_data@naver.com>
+---
+ kernel/timer.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/kernel/timer.c b/kernel/timer.c
+index df76a9f0..21a1e550 100755
+--- a/kernel/timer.c
++++ b/kernel/timer.c
+@@ -839,7 +839,7 @@ unsigned long apply_slack(struct timer_list *timer, unsigned long expires)
+ 	if (mask == 0)
+ 		return expires;
+ 
+-	bit = find_last_bit(&mask, BITS_PER_LONG);
++	bit = __fls(mask);
+ 
+ 	mask = (1 << bit) - 1;
+ 
